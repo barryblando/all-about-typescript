@@ -25,3 +25,18 @@ class CarDecorator {
     console.log('Car Class Decorator')
   }
 }
+
+// MODULE: Advanced Decorator
+function printable(constructorFn: Function) {
+  constructorFn.prototype.print = function() {
+    console.log(this)
+  }
+}
+
+@printable
+class PlantPrintable {
+  name = "Green Plant";
+}
+
+const plantPrintable = new PlantPrintable();
+(<any>plantPrintable).print();

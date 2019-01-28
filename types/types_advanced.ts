@@ -6,14 +6,17 @@
 function extend<T, U>(first: T, second: U): T & U {
   let result = <T & U>{};
   for (let id in first) {
-    // (...operands) means comma operator: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Comma_Operator
+    // [MORE INFO]: https://basarat.gitbooks.io/typescript/content/docs/types/type-assertion.html
+    // [MORE INFO]: https://stackoverflow.com/questions/42551681/typescript-what-is-mean-this-as-any
+    // [MORE INFO]: https://acdcjunior.github.io/typescript-cast-object-to-other-type-or-instanceof.html
+    // explicity cast/assert any
     // ({ name: "jim" })["name"]
-      (<any>result)[id] = (<any>first)[id]; // ?
+    (result as any)[id] = (<any>first)[id]; // ?
   }
 
   for (let id in second) {
       if (!result.hasOwnProperty(id)) {
-          (<any>result)[id] = (<any>second)[id];
+        (<any>result)[id] = (<any>second)[id]; // ?
       }
   }
 
@@ -28,16 +31,14 @@ interface Loggable {
   log(): void;
 }
 
-class ConsoleLogger implements Loggable {
-  log() {
+class ConsoleLogger {
+  public log() {
       console.log('This is console logger')
   }
 }
 
-var jim = extend(new Person2("Jim"), new ConsoleLogger());
-jim // ?
-var n = jim.name;
-jim.log // ?
+var jim = extend(new Person2("Jim"), new ConsoleLogger()); // ?
+(<any>jim).log
 
 
 // MODULE: 2. Union Types. A union type describes a value that can be one of several types. We use the vertical bar (|) to separate each type.
