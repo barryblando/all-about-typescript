@@ -93,7 +93,7 @@ function LogEdit(value: boolean = false): any {
     target // P2 { }
     descriptor // P2 { }
     // Override foo function and its parameters/arguments
-    descriptor.value = function (...args: string[]) {
+    descriptor.value = function (...args: Array<string>) {
       args
       console.log(`${<string>key} was called with:`, args);
       args[0] = 'Woah!'; // a
@@ -188,4 +188,99 @@ console.log(`Radius: ${Circle.Radius},
 
 
 
+// MODULE: Parameter Decorator
+// - applied to the function for a class constructor or method declaration.
+// - The expression for the parameter decorator will be called as a function at runtime, with the following three arguments:
+//   - The prototype of the class
+//   - The name of the member
+//   - The ordinal index of the parameter in the function’s parameter list.
+
+function required(target: Object, methodName: string | symbol, paramIndex: number) {
+  target
+  methodName
+  paramIndex
+  let metadataKey = `__required_${<string>methodName}_parameters`;
+
+  // if Calc metadataKey is an array property then
+  if (Array.isArray((<any>target)[metadataKey])) {
+    // push
+    (<any>target)[metadataKey].push(paramIndex);
+  } else {
+    // initialize a new one
+    (<any>target)[metadataKey] = [paramIndex];
+  }
+}
+
+// Method Decorator
+function validate(target: Object, key: string | symbol, descriptor: PropertyDescriptor) {
+  target
+  key
+  let originalMethod = descriptor.value;
+
+  descriptor.value = function(...args: any[]) {
+    let metadataKey = `__required_${<string>key}_parameters`;
+    var indices = (<any>target)[metadataKey].sort(); // ?
+    for (let i = 0; i < args.length; i++) {
+      args // ?
+      indices[i] // ?
+      args.indexOf(args[indices[i]]) // ?
+      args.indexOf(args[indices[i]]) === indices[i] // ?
+      args[indices[i]] // ?
+      // check only those who have a required on parameter, you can use Metadata Reflection API for declarative way
+      if (args[indices[i]] === undefined && args.indexOf(args[indices[i]]) === indices[i]) {
+        throw new Error('missing required parameter')
+      }
+    }
+    const result = originalMethod.apply(this, args);
+    return result;
+  }
+
+  return descriptor;
+}
+
+class Calculator {
+  @validate
+  add(a: number, @required b: any, @required c: any) {
+    return a + b + c;
+  }
+
+  @validate
+  sub(a: number, @required b: number, c: number) {
+    return a - b - c;
+  }
+}
+
+// I declare class calculator with method ‘add’ that decorated with ‘validate’, and params that are decorated with ‘required’.
+// It means that every time the method is called, the ‘validate’ decorator will be called before.
+// The parameter decorator is called before the method parameter and inserts the required fields into ‘metadataKey’ array.
+// The ‘validate’ decorator goes over all the fields in the ‘metadataKey’ field and verifies that they are defined.
+// If not, it throws an exception.
+
+const calc = new Calculator();
+calc.add(5, 4, 10) // ?
+// calc.sub(5, undefined, 4) // ?
+
+
 // MODULE: Accessor Decorator
+// is declared just before an accessor declaration. The accessor decorator is applied to the Property Descriptor for the accessor and can be used to observe, modify, or replace an accessor ’s definitions. An accessor decorator cannot be used in a declaration file, or in any other ambient context (such as in a declare class).
+
+function configurable(value: boolean) {
+  return function (target: any, propertyKey: string, descriptor: PropertyDescriptor) {
+      descriptor.configurable = value;
+  };
+}
+
+class Point {
+  private _x: number;
+  private _y: number;
+  constructor(x: number, y: number) {
+      this._x = x;
+      this._y = y;
+  }
+
+  @configurable(false)
+  get x() { return this._x; }
+
+  @configurable(false)
+  get y() { return this._y; }
+}
