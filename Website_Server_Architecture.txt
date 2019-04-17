@@ -1,0 +1,45 @@
+============ Website Server Architecture ============
+
+FrontEnd
+  - Single Page Web Apps written in React + Redux (Middleware Observable/Saga)
+  - Static Multi Page Apps written in NextJS + React
+  - NodeJS BackEnd React for the FrontEnd... (both of the above will use some NodeJS for routing, etc..)
+
+Thin BackEnd Servers (non CPU-bound)
+  - NodeJS.. Microservices.. express/fastify app for each service
+  - Single Thread event driven architecture
+  - Very Productive. Not as verbose as Java etc..
+  - Good for most services that are waiting on I/O
+
+Application Servers (CPU Intensive BackEnd Servers)
+  - C# ASP.NET CORE 3
+  - Kestrel Application Server.. I/O uses async event loops. CPU bound uses thread-per-request architecture!!!
+    - https://stackoverflow.com/questions/35639205/what-is-kestrel-vs-iis-express
+  - Used for business logic. automation.. security.. transactions. (file parsing)
+
+Low level / Highly performing algorithms
+  - Written in C/C++, Use C libraries in Java.. C# and higher level languages..
+    - Image/Video processing is an example. Do this when Java is too slow, or you are doing low level programming
+
+Security
+  - JSON Web Tokens (JWT) created by Application Servers. Only problem with JWT is
+    that they can never be revoked... It may be better to use them in cases where
+    they are only valid for 5 minutes max. Otherwise we could still use sessions
+    so that the server has control
+  - all secured routes will need the secret... FrontEnd and BackEnd api...
+
+Database
+  - PostgreSQL for now. Get a good handle on this before exploring much else in the database world.
+  - Neo4j for graph database
+
+- Containers
+ - Docker image for each service BackEnd  | FrontEnd | Database | Authentication
+
+Deployment
+  - NGINX to connect our Microservices together. /api/ goes to the BackEnd server and so on..
+    - as load balancer
+  - Docker containers for each Microservices.. Java/ASP BackEnd.. FrontEnd
+  - Deploy each on separate servers / Kubernetes, Integration of version iteration would be easy
+   - will not crash website
+
+=====================================================
