@@ -1,8 +1,15 @@
 // [MORE INFO]: https://www.typescriptlang.org/docs/handbook/generics.html
 // [MORE INFO]: https://www.typescriptlang.org/docs/handbook/type-compatibility.html
 
-// Generics is use to create a component that can work over a variety of types rather than a single one.
-// This allows users to consume these components and use their own types.
+// MODULE: When to Use Generics?
+// Generics give us great flexibility for assigning data to items in a type-safe way, but should not be used unless such an abstraction makes sense, that is, when simplifying or minimizing code where multiple types can be utilized.
+
+// Viable use cases for generics are not far reaching; you will often find a suitable use case in your codebase here and there to save repetition of code — but in general there are two criteria we should meet when deciding whether to use generics:
+
+// - When your function, interface or class will work with a variety of data types
+// - When your function, interface or class uses that data type in several places
+
+// It may well be the case that you will not have a component that warrants using generics early on in a project. But as the project grows, a component’s capabilities often expand. This added extensibility may well eventually adhere to the above two criteria, in which case introducing generics would be a cleaner alternative than to duplicate components just to satisfy a range of data types.
 
 // T means type variable, a special kind of variable that works on types rather than values
 // This T allows us to capture the type the user provides (e.g. number, string, boolean), and then use it to denote what is being returned
@@ -14,7 +21,7 @@
 
 // Similarly:
 // - Normal variables exist at the object level.
-// - There are also type variables, which exist at the meta level. They are variables whose values are types.
+// - Type variables exist at the meta level. They are variables whose values are types.
 
 // Normal variables are introduced via const, let, etc. Type variables are introduced via angle brackets (< >). For example...
 
@@ -99,7 +106,7 @@ type Player = {
 type F = () => Promise<Array<Player>>;
 
 const f1: F = () => {
-  return Promise.all<Player>([
+  return Promise.all([
       {
           name: "David Gomes",
           age: 23,
@@ -122,8 +129,9 @@ f1() // ?
 // MODULE: Generic Interface
 
 interface Stack<T> {
-  push(x: T): void;
-  pop(): T;
+  arrNum?: number[]
+  push(x: T): void
+  pop(): T
 }
 
 // Stack is a stack of values that all have a given type T. You must fill in T whenever you mention Stack.
@@ -131,11 +139,14 @@ interface Stack<T> {
 // Method .pop() returns values of type T.
 
 const dummyStack: Stack<number> = {
-  push(x: number) {},
-  pop() { return 123 },
+  arrNum: [],
+  push(x: number) {
+    this.arrNum.push(x);
+  },
+  pop() { return this.arrNum },
 };
 
-// Practical Generic Interface
+// MODULE: Practical Generic Interface
 
 // This is an interface for an Array whose elements are of type T that we have to fill in whenever we use this interface
 interface ArrayGen<T> {
@@ -175,8 +186,7 @@ class SimpleMath<T extends number | string, U extends number | string> {
   constructor(baseValue: T, multiplyValue: U) {
     this.baseValue = baseValue;
     this.multiplyValue = multiplyValue;
-
-   }
+  }
 
   calculate(): number {
     return +this.baseValue * +this.multiplyValue
@@ -186,7 +196,9 @@ class SimpleMath<T extends number | string, U extends number | string> {
 const simpleMath = new SimpleMath<string, number>("10", 20);
 simpleMath.calculate() // ?
 
-// Practical Generic Constraints
+// MODULE: Practical Generic Constraints incl. Interface - Using constraints to ensure type properties exist
+
+// Sometimes we may wish to limit the amount of types we accept with each type variable — and as the name suggests — that is exactly what generic constraints do. Sometimes a generic type will require that certain properties exists on that type. Not only this, the compiler will not be aware that particular properties exist unless we explicitly define them to type variables.
 
 // Instead of working with any and all types, we’d like to constrain this function to work with any and all types that also have the other property. As long as the type has this member, we’ll allow it, but it’s required to have at least this member. To do so, we must list our requirement as a constraint on what T can be and then we’ll use this interface and the extends keyword to denote our constraint:
 
@@ -218,8 +230,8 @@ class CCC<T extends Crocodile> {
   constructor(public cccUnit: T) {}
 }
 
-// you can omit <Type Argument> as long as instance has the constraint
-let ccc =  new CCC<BlueCroc>({ personality: "ultra cheesy", color: "blue" });
+// you can omit <Type Argument> as long as class has the generic constraint
+let cccInstance =  new CCC<BlueCroc>({ personality: "ultra cheesy", color: "blue" });
 
 
 

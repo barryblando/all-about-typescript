@@ -1,7 +1,9 @@
 // [MORE INFO]: https://www.typescriptlang.org/docs/handbook/interfaces.html
 // [MORE INFO]: https://www.typescriptlang.org/docs/handbook/type-compatibility.html
+// [MORE INFO]: https://pawelgrzybek.com/typescript-interface-vs-type/
 
 // Also NOTE: Interface-as-records: A fixed amount of properties that are known at development time. Each property can have a different type.
+// One of TypeScript’s core principles is that type-checking focuses on the shape that values have. This is sometimes called “duck typing” or “structural subtyping”.
 
 // interface is a contract signed by an object which have certain property / methods that been agreed
 // - guarantee your code that certain property or methods setup in the interface are available
@@ -28,6 +30,7 @@ function changeName(person: NamedPerson) {
   console.log("Sorry your name can't be changed, " + person);
 }
 
+// Duck Typing / Structural Subtyping
 const person: NamedPerson = {
   firstName: "Barry",
   age: 24,
@@ -56,8 +59,7 @@ greetInt({ age: 23 })
 
 
 
-// ------ Indexable Types ------
-
+// MODULE: Indexable Types
 interface StringArray {
   // This index signature states that when a StringArray is indexed with a number, it will return a string
   [index: number]: string;
@@ -73,13 +75,13 @@ let myStr: string = myArray[0];
 class Animal {
   // name: string;
 }
-class Dog extends Animal2 {
+class Dog extends Animal {
   // breed: string;
 }
 
 // Error: indexing with a numeric string might get you a completely separate type of Animal!
 interface NotOkay {
-  [x: number]: Animal2;
+  [x: number]: Animal;
   [x: string]: Dog;
 }
 
@@ -104,7 +106,7 @@ let myArrayReadonly: ReadonlyStringArray = ["Alice", "Bob"];
 
 
 
-// ------ Interface for an Array of Objects ------
+// MODULE: Interface for an Array of Objects
 interface Hero {
   id: number
   name: string
@@ -115,8 +117,8 @@ interface Hero {
   legs?: number
 }
 
-function heroAtt(hero: Hero[]): void {
-  console.log(hero)
+function heroAtt(hero: Hero[]): Hero[] {
+  return hero;
 }
 
 const heroCharacteristic: Hero[] = [
@@ -137,13 +139,15 @@ const heroCharacteristic: Hero[] = [
   },
 ];
 
-heroAtt(heroCharacteristic);
+const heroChar = heroCharacteristic.map(heroC => heroC.name); // ?
+
+heroAtt(heroCharacteristic)[1]['name']; // ?
 
 
 
 
 
-// ----- Classes with Interface ------
+// MODULE: Classes with Interface
 // with implements, means that you should implement what's required property on NamedPerson inside the class
 // explicitly enforcing that a class meets a particular contract
 class PersonWithInterface implements NamedPerson {
@@ -211,7 +215,7 @@ let analog = createClock(AnalogClock, 7, 32);
 
 
 
-// ----- Function Types with Interface ------
+// MODULE: Function Types with Interface
 interface DoubleValueFunc {
   (number1: number, number2: number): number
 }
@@ -247,7 +251,7 @@ function getBooks(): Array<Book> {
 
 
 
-// ----- Interface Inheritance ------
+// MODULE: Interface Inheritance
 // Like classes, interfaces can extend each other. This allows you to copy the members of one interface into another,
 // which gives you more flexibility in how you separate your interfaces into reusable components.
 interface AgedPerson extends NamedPerson {
@@ -287,7 +291,7 @@ square.penWidth = 5.0;
 
 
 
-// ----- Hybrid Types -----
+// MODULE: Hybrid Types
 interface Counter {
   (start: number): string;
   interval: number;
@@ -301,7 +305,7 @@ function getCounter(): Counter {
   return counter; // ?
 }
 
-let c = getCounter(); // ?
-c(10);
-c.reset();
-c.interval = 5.0;
+let ctr = getCounter(); // ?
+ctr(10);
+ctr.reset();
+ctr.interval = 5.0;
