@@ -3,6 +3,27 @@
 
 // ---- CLASSES ----
 
+// Class methods and properties can be typed like you would expect.
+
+class Foo {
+  state: { val: number } = { val: 0 };
+  update(val: number): void {
+    this.state = { val };
+  }
+  getVal(): number {
+    return this.state.val;
+  }
+}
+
+const foobar: Foo = new Foo();
+
+foobar.update(3);
+// foobar.update("foo"); // !Error!
+
+const fooResult: number = foobar.getVal();
+// const fooResultError: string = foobar.getVal(); // !Error!
+
+
 class Person {
   // class properties
   name: string;
@@ -25,7 +46,7 @@ class Person {
   }
 }
 
-// Inheritance
+// MODULE: Inheritance
 // - Derived classes are often called subclasses, and base classes are often called superclasses.
 
 class Barry extends Person {
@@ -38,7 +59,7 @@ class Barry extends Person {
   }
 }
 
-// Class as "Type"
+// MODULE: Class as "Type"
 
 class Animal2 {
   name: string;
@@ -72,7 +93,7 @@ let tom: Animal2 = new Horse("Tommy the Palomino"); // ?
 sam.move();
 tom.move(34);
 
-// Getter & Setters / Accessors
+// MODULE: Getter & Setters / Accessors
 // - control access to your properties and making sure that certain criteria are met before returning/assigning a value
 // - when using it you don't call it like a method, you call it as property
 // - accessors with a get and no set are automatically inferred to be readonly.
@@ -100,7 +121,7 @@ let plant = new Plant();
 plant.species = "Green" // ?
 plant.species // ?
 
-// Static Properties & Methods - useful for utility / helper class tools
+// MODULE: Static Properties & Methods - useful for utility / helper class tools
 class Helpers {
   // static means property/method can be access outside of class without instantiating the class or do instance of it
   static PI: number = 3.14
@@ -113,7 +134,7 @@ class Helpers {
 2 * Helpers.PI // ?
 Helpers.calcCircumference(8) // ?
 
-// Abstract Classes
+// MODULE: Abstract Classes
 // - cannot be instantiated directly but to be extend only
 // - use if you want to bundle some general functionality or logic in these abstract base classes
 
@@ -139,7 +160,7 @@ let newITProject = new ITProject();
 newITProject.changeName("ABE Construction");
 newITProject // ?
 
-// Private constructor
+// MODULE: Private constructor
 // Singleton - setup a class where you only want to have one instance during runtime
 class OnlyOne {
   private static instance: OnlyOne;
@@ -162,7 +183,7 @@ class OnlyOne {
 let right = OnlyOne.getInstance(); // Once instantiated, no more 'new' keyword for its class
 
 
-// Parameter Properties for readonly
+// MODULE: Parameter Properties for readonly
 // - Parameter properties let you create and initialize a member in one place
 // - no need to initialize at their declaration - like numberOfLegs
 // - put directly on constructor parameter
