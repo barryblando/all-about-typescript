@@ -6,6 +6,13 @@
 
 // MODULE: Decorator is a special kind of declaration that can be attached to a class declaration, method, accessor, property, or parameter. Decorators use the form @expression, where expression must evaluate to a function that will be called at runtime with information about the decorated declaration.
 
+// INFO: There are five different things that you can decorate:
+// - Class definitions (Used in most cases)
+// - Properties (Used in most cases)
+// - Methods (Used in most cases)
+// - Accessors (Average in most cases)
+// - Parameters (Rare in most cases)
+
 // INFO: Decorators can help writing better code, clear and reasonable:
 // * Separate the essence of the class/method.
 // * Describe the object, for instance, a class with ‘@component’ decorator is immediately recognized as one, much more fast then if it would have certain properties or methods within.
@@ -14,8 +21,8 @@
 // INFO: In order to create a decorator, we just have to create a simple function. The function receives three parameters:
 // [MORE INFO]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperty
 // * target - Either the constructor function of the class for a static member or the prototype of the class for an instance member.
-// * key - The name of the member/property to be defined or modified.
-// * descriptor - The Property Descriptor for the member.
+// * key - The name of the member/property to be defined or modified or decorated.
+// * descriptor - The Property Descriptor for the method member.
 
 // Here we attach logged to a class as a decorator which gives reference to the constructor function
 function logged(constructorFn: Function) {
@@ -98,6 +105,7 @@ function LogEdit(value: boolean = false): any {
       console.log(`${<string>key} was called with:`, args);
       args[0] = 'Woah!'; // a
       args
+      this // ?
       // return new foo and its new value for parameters
       var result = originalMethod.apply(this, args);
       return result;
