@@ -9,5 +9,7 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {},
-  "dependencies": {}
+  "dependencies": {
+    "rxjs": "^6.4.0"
+  }
 }
