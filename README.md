@@ -22,7 +22,7 @@ author: Barry
 
    In a gradually-typed language such as TypeScript, some declarations will have their types checked during compile-time and others will have their types checked at run-time.
 
-# Other Sources
+# Other Sources about typescript
 
 - [TypeScript 2.0: Built-In Type Declarations](https://mariusschulz.com/blog/typescript-2-0-built-in-type-declarations)
 - [TypeScript 2.1: External Helpers Library](https://mariusschulz.com/blog/typescript-2-1-external-helpers-library)
