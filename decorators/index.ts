@@ -4,7 +4,7 @@
 // [More Info]: https://www.spectory.com/blog/A%20deep%20dive%20into%20TypeScript%20decorators
 // [More Info]: https://dev.to/scleriot/typescript-method-decorators-example-1imc
 
-// MODULE: Decorator is a special kind of declaration that can be attached to a class declaration, method, accessor, property, or parameter. Decorators use the form @expression, where expression must evaluate to a function that will be called at runtime with information about the decorated declaration.
+// MODULE: Decorator is a special kind of declaration that can be attached to a class declaration, method, accessor, property, or parameter. Decorators use the form @expression, where expression must evaluate to a function that will be called at runtime with information about the decorated declaration. Basically, its a function that takes another function and extends the behavior without modifying (i.e doing Dependency Injection).
 
 // INFO: There are five different things that you can decorate:
 // - Class definitions (Used in most cases)
@@ -235,7 +235,7 @@ function validate(target: Object, key: string | symbol, descriptor: PropertyDesc
       args.indexOf(args[indices[i]]) === indices[i] // ?
       args[indices[i]] // ?
       // check only those who have a required on parameter, you can use Metadata Reflection API for declarative way
-      if (args[indices[i]] === undefined && args.indexOf(args[indices[i]]) === indices[i]) {
+      if (typeof args[indices[i]] === 'undefined' && args.indexOf(args[indices[i]]) === indices[i]) {
         throw new Error('missing required parameter')
       }
     }
@@ -265,7 +265,7 @@ class Calculator {
 // If not, it throws an exception.
 
 const calc = new Calculator();
-calc.add(5, 4, 10) // ?
+calc.add(5, undefined, 10) // ?
 // calc.sub(5, undefined, 4) // ?
 
 
