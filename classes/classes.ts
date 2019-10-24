@@ -136,6 +136,10 @@ Helpers.calcCircumference(8) // ?
 
 // MODULE: Abstract Classes
 // - cannot be instantiated directly but to be extend only
+// - Only used as a parent class
+// - Can contain real implementation for some methods
+// - The Implemented methods can refer to other methods that don't actually exist yet (we still have to provide names and types for the un-implemented)
+// - Can make child classes promise to implement some other method
 // - use if you want to bundle some general functionality or logic in these abstract base classes
 
 abstract class Project {
