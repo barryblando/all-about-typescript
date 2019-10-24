@@ -9,6 +9,10 @@
 
 // Type assertions have two forms. One is the “angle-bracket” syntax:
 
+// NOTE: Type Assertion vs. Casting
+// The reason why it's not called "type casting" is that casting generally implies some sort of runtime support.
+// However, type assertions are purely a compile time construct and a way for you to provide hints to the compiler on how you want your code to be analyzed.
+
 let someValueAB: any = "this is a string";
 
 let strLengthAB: number = (<string>someValueAB).length;
