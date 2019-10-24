@@ -51,9 +51,10 @@ aVar = "bar";
 // BOOLEAN LITERAL TYPE
 // While boolean literal types are rarely useful in isolation, they work great in conjunction with tagged union types and control flow based type analysis. For instance, a generic Result<T> type that either holds a value of type T or an error message of type string can be defined as follows:
 
+// NOTE: TS allows one ignored leading | or & in a type position to give developers more formatting freedom
 type Result<T> =
   | { success: true; value: T }
-  | { success: false; error: string };
+  | { success: false; error: T };
 
 // did you notice that the only TypeScript artifacts in this entire code example are the declaration of Result<T> and the type annotations in the function signature? The remainder of the code is plain, idiomatic JavaScript that is still fully typed due to control flow based type analysis.
 
@@ -91,10 +92,10 @@ function parseEmailAddress(input: string | null | undefined): Result<string> {
 
 const parsed = parseEmailAddress("example@example.com");
 
-if (parsed.success) {
+if (parsed.success === true) {
   parsed.value; // OK
   // parsed.error; // !Error
-} else {
+} else if (parsed.success === false){
   // parsed.value; // !Error
   parsed.error; // OK
 }
