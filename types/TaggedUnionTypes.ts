@@ -2,6 +2,12 @@
 // tagged union types, which you might know as sum types or discriminated union types from other programming languages.
 // A tagged union type is a union type whose member types all define a discriminant property of a literal type.
 
+// You can combine singleton types, union types, type guards, and type aliases to build an advanced pattern called discriminated unions, also known as `tagged unions` or `algebraic data types`. Discriminated unions are useful in functional programming. Some languages automatically discriminate unions for you; TypeScript instead builds on JavaScript patterns as they exist today. There are three ingredients:
+
+// Types that have a common, singleton type property — the discriminant.
+// A type alias that takes the union of those types — the union.
+// Type guards on the common property.
+
 // Modelling Payment Methods with Tagged Union Types
 // Let's say we want to model the following payment methods that users of a system can choose from:
 // - Cash without further information,
@@ -23,8 +29,8 @@ interface CreditCard {
   securityCode: string;
 }
 
-// Note that, in addition to the required information, each 'type' has a kind property — the so-called discriminant property.
-// It's of a string literal type in each case here. We'll look at the discriminant property in a minute.
+// Note that, in addition to the required information, each 'type' has a `kind` property — the so-called `discriminant` property.
+// It's of a string literal type in each case here.
 
 // Let's now also define a PaymentMethod type that is the union of the three types we just defined.
 // This way, we're stating that every payment method must have exactly one of the three given constituent types:
@@ -32,6 +38,8 @@ interface CreditCard {
 type PaymentMethod = Cash | PayPal | CreditCard;
 
 // Now that our types are in place, let's write a function that accepts a payment method and returns a human-readable description of it:
+
+// NOTE: you need to use a type guard style check (==, ===, !=, !==) or switch on the discriminant property (here kind), so TypeScript will realize that the object must be of the type that has that specific literal and narrow down the type of an object within a conditional block for you :)
 
 function describePaymentMethod1(method: PaymentMethod) {
   switch (method.kind) {
@@ -46,6 +54,9 @@ function describePaymentMethod1(method: PaymentMethod) {
     case "credit":
       // Here, method has type CreditCard
       return `Credit card (${method.cardNumber})`;
+    default: // Exhaustive Checks
+      const _exhaustiveCheck: never = method;
+      return _exhaustiveCheck;
   }
 }
 
